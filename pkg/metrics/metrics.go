@@ -62,6 +62,7 @@ func (m *Metrics) Execute() error {
 	defer os.Chdir(prev)
 	os.Chdir(m.c.WorkDir)
 	cmd := exec.CommandContext(ctx, m.c.ScriptPath, m.c.Args...)
+	cmd.Env = os.Environ()
 	stdout, err := cmd.Output()
 	if err != nil {
 		return err
