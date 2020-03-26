@@ -1,0 +1,6 @@
+host: '0.0.0.0'
+port: 9410
+metrics:
+- workdir: "/app/example/test_metrics"
+  scriptPath: "./metrics"
+  args: ["takutakahashi"]

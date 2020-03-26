@@ -1,0 +1,5 @@
+#!/bin/bash
+AUTHOR=$1
+DATE=`date +%s`
+FMT='{"name": "test", "values": [{"labels":{"author": "%s", "color":"green"}, "value": 1.0}, {"labels":{"color": "black", "time": "%d"}, "value": 12345.0}]}'
+printf "$FMT" "$AUTHOR" "$DATE"
