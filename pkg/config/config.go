@@ -7,9 +7,10 @@ import (
 )
 
 type Config struct {
-	Host    string          `yaml:"host"`
-	Port    string          `yaml:"port"`
-	Metrics []MetricsConfig `yaml:"metrics"`
+	Host       string          `yaml:"host"`
+	Port       string          `yaml:"port"`
+	Resolution string          `yaml:"resolution"`
+	Metrics    []MetricsConfig `yaml:"metrics"`
 }
 
 type MetricsConfig struct {

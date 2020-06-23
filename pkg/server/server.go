@@ -55,7 +55,16 @@ func (s Server) StartWorker() {
 		}
 		logrus.Info(s.metrics)
 		time.Sleep(30 * time.Second)
+		s.Sleep()
 	}
+}
+
+func (s Server) Sleep() {
+	duration, err := time.ParseDuration(s.config.Resolution)
+	if err != nil {
+		duration = 30 * time.Second
+	}
+	time.Sleep(duration)
 }
 
 func (s Server) Address() string {
