@@ -69,6 +69,7 @@ func (m *Metrics) Sleep() {
 }
 
 func (m *Metrics) Execute() error {
+	m.Sleep()
 	ctx := context.TODO()
 	prev, err := filepath.Abs(".")
 	if err != nil {
