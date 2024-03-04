@@ -9,7 +9,8 @@ import (
 func TestMetricsStore(t *testing.T) {
 	ms := NewMetricsStore()
 	mc := config.MetricsConfig{WorkDir: "../../example/test_metrics", ScriptPath: "./metrics", Args: []string{"takutakahashi"}}
-	m := NewMetrics(mc)
+	c := config.Config{Metrics: []config.MetricsConfig{mc}, Resolution: "1s"}
+	m := NewMetrics(mc, c)
 	ms.Add(m)
 	if ms.String() != "" {
 		t.Fatal(ms.String())
@@ -22,7 +23,8 @@ func TestMetricsStore(t *testing.T) {
 
 func TestMetrics(t *testing.T) {
 	mc := config.MetricsConfig{WorkDir: "../../example/test_metrics", ScriptPath: "./metrics", Args: []string{"takutakahashi"}}
-	m := NewMetrics(mc)
+	c := config.Config{Metrics: []config.MetricsConfig{mc}, Resolution: "1s"}
+	m := NewMetrics(mc, c)
 	t.Log(mc)
 	t.Log(m.c)
 	err := m.Execute()
