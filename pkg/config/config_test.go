@@ -14,7 +14,10 @@ func TestLoadConfig(t *testing.T) {
 		t.Fatal(config)
 	}
 
-	if config.Metrics[0].WorkDir != "example/test_metrics" {
+	if config.Metrics[0].WorkDir != "/app/example/test_metrics" {
+		t.Fatal(config)
+	}
+	if config.Metrics[0].Resolution != "1m" {
 		t.Fatal(config)
 	}
 }

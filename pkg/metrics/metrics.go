@@ -8,12 +8,15 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/takutakahashi/any-exporter/pkg/config"
+	"golang.org/x/sync/errgroup"
 )
 
 type Metrics struct {
 	c      config.MetricsConfig
+	sc     config.Config
 	Result MetricsResult
 }
 
@@ -44,16 +47,29 @@ func (ms MetricsStore) Length() int {
 }
 
 func (ms *MetricsStore) ExecuteAll() error {
+	g := new(errgroup.Group)
 	for _, v := range ms.store {
-		err := v.Execute()
-		if err != nil {
-			return err
-		}
+		g.Go(v.Execute)
+	}
+	if err := g.Wait(); err != nil {
+		return err
 	}
 	return nil
 }
 
+func (m *Metrics) Sleep() {
+	duration, err := time.ParseDuration(m.c.Resolution)
+	if err != nil {
+		duration, err = time.ParseDuration(m.sc.Resolution)
+		if err != nil {
+			duration = 30 * time.Second
+		}
+	}
+	time.Sleep(duration)
+}
+
 func (m *Metrics) Execute() error {
+	m.Sleep()
 	ctx := context.TODO()
 	prev, err := filepath.Abs(".")
 	if err != nil {
@@ -96,8 +112,8 @@ func (m MetricsStore) String() string {
 	return result
 }
 
-func NewMetrics(c config.MetricsConfig) Metrics {
-	return Metrics{c: c, Result: MetricsResult{}}
+func NewMetrics(c config.MetricsConfig, sc config.Config) Metrics {
+	return Metrics{c: c, sc: sc, Result: MetricsResult{}}
 }
 
 func NewMetricsStore() MetricsStore {

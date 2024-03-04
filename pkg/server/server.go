@@ -2,7 +2,6 @@ package server
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -44,7 +43,7 @@ func (s Server) StartServer() {
 
 func (s Server) StartWorker() {
 	for _, mc := range s.config.Metrics {
-		m := metrics.NewMetrics(mc)
+		m := metrics.NewMetrics(mc, s.config)
 		s.metrics.Add(m)
 	}
 	logrus.Info(s.metrics.Length())
@@ -54,17 +53,7 @@ func (s Server) StartWorker() {
 			logrus.Error(err)
 		}
 		logrus.Info(s.metrics)
-		time.Sleep(30 * time.Second)
-		s.Sleep()
 	}
-}
-
-func (s Server) Sleep() {
-	duration, err := time.ParseDuration(s.config.Resolution)
-	if err != nil {
-		duration = 30 * time.Second
-	}
-	time.Sleep(duration)
 }
 
 func (s Server) Address() string {
